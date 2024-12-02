@@ -394,6 +394,12 @@ class MdxTuple:
             member = Member.of(member)
         self.members.append(member)
 
+    def remove_member(self, member: Union[str, Member]):
+        if isinstance(member, str):
+            member = Member.of(member)
+        if member in self.members:
+            self.members.remove(member)
+
     def is_empty(self) -> bool:
         return not self.members
 
@@ -1381,6 +1387,10 @@ class MdxBuilder:
 
     def add_member_to_where(self, member: Union[str, Member]) -> 'MdxBuilder':
         self._where.add_member(member)
+        return self
+
+    def remove_member_to_where(self, member: Union[str, Member]) -> 'MdxBuilder':
+        self._where.remove_member(member)
         return self
 
     def add_member_to_properties(self, axis: int, member: Union[str, DimensionProperty]) -> 'MdxBuilder':

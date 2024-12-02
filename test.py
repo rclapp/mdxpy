@@ -1014,6 +1014,27 @@ class Test(unittest.TestCase):
             "WHERE ([dim3].[dim3].[elem3],[dim4].[dim4].[elem4])",
             mdx)
 
+    def test_mdx_builder_to_mdx_remove_member_from_where(self):
+        mdx = MdxBuilder.from_cube("cube") \
+            .add_hierarchy_set_to_column_axis(MdxHierarchySet.all_leaves("Dim1", "Dim1")) \
+            .columns_non_empty() \
+            .add_hierarchy_set_to_row_axis(MdxHierarchySet.all_leaves("Dim2", "Dim2")) \
+            .rows_non_empty() \
+            .where(Member.of("Dim3", "Elem3"), Member.of("Dim4", "Elem4")
+                   ) \
+            .remove_member_to_where(Member.of("Dim3", "Elem3")) \
+            .to_mdx()
+
+        self.assertEqual(
+            "SELECT\r\n"
+            "NON EMPTY {TM1FILTERBYLEVEL({TM1SUBSETALL([dim1].[dim1])},0)} "
+            "DIMENSION PROPERTIES MEMBER_NAME ON 0,\r\n"
+            "NON EMPTY {TM1FILTERBYLEVEL({TM1SUBSETALL([dim2].[dim2])},0)} "
+            "DIMENSION PROPERTIES MEMBER_NAME ON 1\r\n"
+            "FROM [cube]\r\n"
+            "WHERE ([dim4].[dim4].[elem4])",
+            mdx)
+
     def test_OrderType_ASC(self):
         order = Order("asc")
         self.assertEqual(order, Order.ASC)
