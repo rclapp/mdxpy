@@ -1022,7 +1022,7 @@ class Test(unittest.TestCase):
             .rows_non_empty() \
             .where(Member.of("Dim3", "Elem3"), Member.of("Dim4", "Elem4")
                    ) \
-            .remove_member_to_where(Member.of("Dim3", "Elem3")) \
+            .remove_member_from_where(Member.of("Dim3", "Elem3")) \
             .to_mdx()
 
         self.assertEqual(

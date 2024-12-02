@@ -1389,7 +1389,7 @@ class MdxBuilder:
         self._where.add_member(member)
         return self
 
-    def remove_member_to_where(self, member: Union[str, Member]) -> 'MdxBuilder':
+    def remove_member_from_where(self, member: Union[str, Member]) -> 'MdxBuilder':
         self._where.remove_member(member)
         return self
 
