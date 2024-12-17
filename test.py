@@ -815,6 +815,29 @@ class Test(unittest.TestCase):
             "FROM [cube]",
             mdx)
 
+    def test_mdx_builder_empty_axes_nonempty(self):
+        mdx = MdxBuilder.from_cube("cube") \
+            .rows_non_empty() \
+            .add_hierarchy_set_to_axis(0, MdxHierarchySet.member(Member.of("Dim1", "Elem1"))) \
+            .to_mdx()
+
+        self.assertEqual(
+            "SELECT\r\n"
+            "{[dim1].[dim1].[elem1]} DIMENSION PROPERTIES MEMBER_NAME ON 0\r\n"
+            "FROM [cube]",
+            mdx)
+
+        mdx = MdxBuilder.from_cube("cube") \
+            .columns_non_empty() \
+            .add_hierarchy_set_to_axis(1, MdxHierarchySet.member(Member.of("Dim1", "Elem1"))) \
+            .to_mdx()
+
+        self.assertEqual(
+            "SELECT\r\n"
+            "{[dim1].[dim1].[elem1]} DIMENSION PROPERTIES MEMBER_NAME ON 1\r\n"
+            "FROM [cube]",
+            mdx)
+
     def test_mdx_builder_multi_axes(self):
         mdx = MdxBuilder.from_cube("cube") \
             .add_hierarchy_set_to_axis(0, MdxHierarchySet.member(Member.of("Dim1", "Elem1"))) \

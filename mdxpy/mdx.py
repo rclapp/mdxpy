@@ -1464,7 +1464,7 @@ class MdxBuilder:
                 tail=tail_by_axis_position.get(position, None),
                 skip_dimension_properties=skip_dimension_properties)
             for position
-            in self.axes)
+            in self.axes if not self.axes[position].is_empty())
 
         mdx_where = "\r\nWHERE " + self._where.to_mdx() if not self._where.is_empty() else ""
 
